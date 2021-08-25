@@ -1,0 +1,252 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+#define MAX 1000
+//设计联系人结构体
+struct Person
+{
+	string m_Name;
+	string m_Address;
+	string m_Phone;
+	int m_Age;
+};
+
+//设计通讯录结构体
+struct AddressBook
+{
+	//通讯录中保存联系人的数组
+	struct Person personArray[MAX];
+	//通讯录中当前记录联系人的个数
+	int m_Size;
+};
+
+void ShowMenu()
+{
+	cout << endl;
+	cout << " ------------------ 通讯录管理系统 -----------------" << endl;
+	cout << " ------------------ 1. 添加联系人信息 -----------------" << endl;
+	cout << " ------------------ 2. 删除联系人信息 -----------------" << endl;
+	cout << " ------------------ 3. 修改联系人信息 -----------------" << endl;
+	cout << " ------------------ 4. 查找联系人信息 -----------------" << endl;
+	cout << " ------------------ 5. 清除联系人信息 -----------------" << endl;
+	cout << " ------------------ 6. 退出系统       -----------------" << endl;
+}
+
+//添加联系人功能 传入的是一个地址用指针接受
+void addPerson(AddressBook * book)
+{
+	//判断通讯录是否已满
+	if (book->m_Size == MAX)
+	{
+		cout << "通讯录已满,无法添加！" << endl;
+		return;
+	}
+	else
+	{
+		//添加具体联系人
+		string name;
+		cout << "请输入联系人姓名：" << endl;
+		cin >> name;
+		book->personArray[book->m_Size].m_Name = name;
+
+		string address;
+		cout << "请输入联系人地址：" << endl;
+		cin >>address;
+		book->personArray[book->m_Size].m_Address = address;
+
+		string phone;
+		cout << "请输入联系人电话：" << endl;
+		cin >> phone;
+		book->personArray[book->m_Size].m_Phone = phone;
+
+		int age;
+		cout << "请输入联系人年龄：" << endl;
+		cin >> age;
+		book->personArray[book->m_Size].m_Age = age;
+		//更新通讯录人数
+		book->m_Size++;
+		cout << "添加联系人成功！" << endl;
+		system("pause");
+		system("cls");
+	}
+}
+
+//检测人员是否存在，如果存在返回联系人所在数组中的具体位置，不存在返回-1
+int isExist(AddressBook* book, string name)
+{
+	for (int i = 0; i < book->m_Size; i++)
+	{
+		if ( book->personArray[i].m_Name ==name)
+		{
+			return i;
+		}	
+	}
+	return -1;
+}
+
+//显示联系人功能函数
+void ShowPerson(AddressBook * book) 
+{
+	
+	if (book->m_Size == 0)
+	{
+		cout << "联系人还为空" << endl;
+		system("pause");
+		system("cls");
+	}
+	else
+	{
+		int i;
+		cout << "输入1精确查找 输入2显示全部联系人" << endl;
+		cin >> i;
+		if (i == 1)
+		{
+			string name;
+			cout << "请输入您要查找的联系人：" << endl;
+			cin >> name;
+			int p =isExist(book, name);
+			if (p != - 1)
+			{
+				cout << "联系姓名：" << book->personArray[p].m_Name << "\t";
+				cout << "联系人地址" << book->personArray[p].m_Address << "\t";
+				cout << "联系人年龄" << book->personArray[p].m_Age << "\t";
+				cout << "联系人电话" << book->personArray[p].m_Phone << endl;
+				system("pause");
+				system("cls");
+			}
+			else
+			{
+				cout << "未找到该联系人" << endl;
+				system("pause");
+				system("cls");
+			}
+			
+		}
+		else
+		{
+			for (int i = 0; i < book->m_Size; i++)
+			{
+				cout << "联系姓名：" << book->personArray[i].m_Name << "\t";
+				cout << "联系人地址" << book->personArray[i].m_Address << "\t";
+				cout << "联系人年龄" << book->personArray[i].m_Age << "\t";
+				cout << "联系人电话" << book->personArray[i].m_Phone << endl;
+			}
+			system("pause");
+			system("cls");
+		}
+	}	
+}
+
+//删除联系人函数
+void deletePerson(AddressBook *book)
+{
+	string name;
+	cout << "请输入所要删除联系人姓名" << endl;
+	cin >> name;
+	int p =isExist(book,name);
+	if (p != - 1)
+	{
+		for (int i = p; i < book->m_Size; i++)
+		{
+			book->personArray[i] = book->personArray[i + 1];
+		}
+		book->m_Size--;
+		cout << "删除成功" << endl;
+		system("pause");
+		system("cls");
+	}
+	else
+	{
+		cout << "未找到该联系人" << endl;
+		system("pause");
+		system("cls");
+	}
+	return;
+}
+
+//修改联系人功能
+void modifyPerson(AddressBook* book)
+{
+	string name;
+	cout << "请输入所要修改联系人姓名" << endl;
+	cin >> name;
+	int p = isExist(book, name);
+	if (p != - 1)
+	{
+		string name;
+		cout << "请输入联系人姓名：" << endl;
+		cin >> name;
+		book->personArray[p].m_Name = name;
+
+		string address;
+		cout << "请输入联系人地址：" << endl;
+		cin >> address;
+		book->personArray[p].m_Address = address;
+
+		string phone;
+		cout << "请输入联系人电话：" << endl;
+		cin >> phone;
+		book->personArray[p].m_Phone = phone;
+
+		int age;
+		cout << "请输入联系人年龄：" << endl;
+		cin >> age;
+		book->personArray[p].m_Age = age;
+		system("pause");
+		system("cls");
+	}
+	else
+	{
+		cout << "未找到该联系人" << endl;
+		system("pause");
+		system("cls");
+	}
+}
+//清空联系人功能
+void cleanPerson(AddressBook* book)
+{
+	book->m_Size = 0;
+	cout << "清空联系人成功" << endl;
+	system("pause");
+	system("cls");
+}
+
+int main()
+{
+	//创建一个通讯录变量
+	AddressBook book;
+	//初始化通讯录当前人员个数
+	book.m_Size = 0;
+	while (true) // 加一个while循环，当某些功能执行完毕重新显示菜单
+	{
+		ShowMenu();//显示菜单
+		int select = 0; //创建一个变量存储用户的输入
+		cin >> select;
+		switch (select)
+		{
+		case 1: //1. 添加联系人信息
+			addPerson(&book);
+			break;
+		case 2: //2. 删除联系人信息
+			deletePerson(& book);
+			break;
+		case 3: //3. 修改联系人信息
+			modifyPerson(&book);
+			break;
+		case 4: //4. 查找联系人信息
+			ShowPerson(&book);
+			break;
+		case 5: //5. 清除联系人信息
+			cleanPerson(&book);
+			break;
+		case 6: //6. 退出系统
+			cout << "即将退出通讯录系统" << endl;
+			system("pause");
+			return 0;
+			break;
+		}
+	}
+	system("pause");
+	return 0;
+}
